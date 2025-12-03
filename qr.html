@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Expotech USFX 2025</title>
+    <!-- Carga de Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración para usar la fuente Inter y un diseño moderno -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* Fondo ligeramente gris claro */
+        }
+        
+        /* Contenedor del QR con un poco de padding */
+        #qrcode-container {
+            display: inline-block;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* Estilo para el botón de acción */
+        .btn-print {
+            background-color: #10b981; /* Esmeralda para acción */
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn-print:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* --- MEDIA QUERY PARA IMPRESIÓN --- */
+        @media print {
+            body {
+                background-color: white !important; /* Fondo blanco para ahorrar tinta */
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            /* Ocultar elementos no esenciales para la impresión */
+            .no-print {
+                display: none !important;
+            }
+            /* Asegurar que solo el contenido del QR se centre y sea grande */
+            #print-area {
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            /* Resetear el contenedor principal para impresión */
+            #main-content {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: white !important;
+            }
+            /* Resetear el contenedor del QR para maximizar su tamaño */
+            #qrcode-container {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                transform: scale(1.5); /* Escalar el QR para que sea más grande en papel */
+                margin-bottom: 2rem;
+            }
+            /* Ajustar el texto de la URL para que se vea claro */
+            #target-url-info {
+                color: #000 !important;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Área de Impresión (Contiene solo el QR y la URL) -->
+    <div id="print-area" class="max-w-md w-full">
+
+        <!-- Contenedor Principal Centrado -->
+        <div id="main-content" class="bg-white p-8 md:p-10 rounded-xl shadow-2xl text-center border-t-4 border-indigo-600">
+
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 no-print">
+                Código QR Expotech 2025
+            </h1>
+            <p class="text-sm md:text-base text-gray-500 mb-8 no-print">
+                Escanea este código para acceder directamente al sitio web oficial.
+            </p>
+
+            <!-- Contenedor del QR Code -->
+            <div id="qrcode-container" class="mx-auto">
+                <!-- El código QR se insertará aquí -->
+                <div id="qrcode" class="p-2 bg-white rounded-lg"></div>
+            </div>
+
+            <p id="target-url-info" class="mt-8 text-xs md:text-sm text-gray-600 font-medium break-all">
+                <span class="font-bold text-indigo-600">URL:</span> 
+                <span id="target-url">https://expotech2025usfx.rootcode.com.bo</span>
+            </p>
+            
+            <!-- Botón de Acción y Mensaje de Instrucción (No se imprimen) -->
+            <div class="mt-8 no-print">
+                <button onclick="window.print()" class="btn-print inline-flex items-center justify-center py-3 px-6 rounded-lg text-white font-bold text-lg shadow-xl transition duration-300 ease-in-out">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2v2H5v-2h2m0 0h10m-2 2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4m4 0h2"></path></svg>
+                    Imprimir / Guardar como Imagen
+                </button>
+            </div>
+
+            <div class="mt-6 p-4 bg-indigo-50 text-indigo-700 rounded-lg text-sm no-print">
+                <svg class="w-5 h-5 inline mr-2 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Al hacer clic en el botón, selecciona "Guardar como PDF" o "Imprimir" en el diálogo que aparecerá.
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de la librería qrcode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        // Función para generar el código QR una vez que la página esté cargada
+        window.onload = function() {
+            // 1. Obtener la URL del elemento HTML (para evitar codificarla dos veces)
+            const url = document.getElementById('target-url').textContent.trim();
+            const qrElement = document.getElementById('qrcode');
+
+            // 2. Parámetros para la generación del QR
+            const qrOptions = {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark : "#1f2937", // Gris oscuro para el código
+                colorLight : "#ffffff", // Blanco para el fondo
+                correctLevel : QRCode.CorrectLevel.H // Nivel de corrección de error alto
+            };
+
+            // 3. Crear el objeto QRCode
+            try {
+                new QRCode(qrElement, qrOptions);
+                console.log("Código QR generado exitosamente para:", url);
+            } catch (error) {
+                // Manejo de errores si la generación falla
+                const errorMsg = document.createElement('p');
+                errorMsg.className = "text-red-500 mt-4 text-sm";
+                errorMsg.textContent = "Error al generar el código QR. Por favor, verifica la URL.";
+                qrElement.innerHTML = ''; // Limpiar el contenedor
+                qrElement.appendChild(errorMsg);
+                console.error("Fallo al inicializar QRCode:", error);
+            }
+        };
+    </script>
+</body>
+</html>
