@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPO TECH 2025 - Índice de Defensas</title>
+    <!-- Favicon Modificado: T de Tech en color Pink sobre fondo negro/transparente. (Más visible) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='none'/><text y='.9em' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='80' fill='%23ec4899' font-weight='900'>T</text></svg>">
+    
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración para un estilo moderno con Inter Font y colores vibrantes -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fct-blue': '#1e3a8a',
+                        'fct-purple': '#5b21b6',
+                        'fct-pink': '#ec4899',
+                        'fct-light-blue': '#3b82f6',
+                        'fct-dark': '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    // Animación para el header basado en el afiche
+                    keyframes: {
+                        'gradient-shift': {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        'modal-fade': {
+                            '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'gradient-shift': 'gradient-shift 8s ease infinite',
+                        'modal-fade': 'modal-fade 0.3s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilo base para el fondo y la fuente */
+        body {
+            background-color: #0f172a; /* fct-dark */
+            color: #e2e8f0; /* Texto claro */
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Estilo para los encabezados del header */
+        .header-bg {
+            background: linear-gradient(-45deg, #1e3a8a, #5b21b6, #ec4899, #3b82f6);
+            background-size: 400% 400%;
+        }
+
+        /* Estilo para el fondo del encabezado de la tabla */
+        #defenses-table thead th {
+            background-color: #1e3a8a; /* fct-blue */
+            color: white;
+        }
+
+        /* Estilo para filas pares/impares */
+        #defenses-table tbody tr:nth-child(odd) {
+            background-color: #1e293b; /* slate-800 */
+        }
+
+        #defenses-table tbody tr:nth-child(even) {
+            background-color: #0f172a; /* fct-dark */
+        }
+
+        /* Hover effect para las filas */
+        #defenses-table tbody tr:hover {
+            background-color: #334155; /* slate-700 */
+            cursor: default;
+        }
+
+        /* Estilo de los botones */
+        .btn-calificacion {
+            background: linear-gradient(90deg, #ec4899, #5b21b6);
+            transition: all 0.3s ease;
+        }
+        .btn-calificacion:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+            transform: scale(1.05);
+        }
+        .btn-repositorio {
+            background-color: #3b82f6; /* fct-light-blue */
+        }
+        .btn-repositorio:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* Nuevo estilo para el botón de proyecto (más compacto) */
+        .btn-proyecto-compact {
+            background-color: #2563eb; /* blue-700 */
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Evita que el texto se rompa */
+        }
+        .btn-proyecto-compact:hover {
+            background-color: #1e3a8a; /* fct-blue */
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.5);
+            transform: scale(1.05);
+        }
+        
+        /* Estilos para las pestañas de día */
+        .tab-button {
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            /* Flex-grow y base-width para responsividad */
+            flex-grow: 1;
+            flex-basis: 0;
+            min-width: 150px;
+        }
+        .tab-active-COM610 {
+            background-color: #5b21b6; /* fct-purple */
+            color: white;
+            font-weight: bold;
+            border-color: #ec4899; /* fct-pink */
+            box-shadow: 0 2px 10px rgba(91, 33, 182, 0.5);
+        }
+        .tab-active-SIS313 {
+            background-color: #1e3a8a; /* fct-blue */
+            color: white;
+            font-weight: bold;
+            border-color: #3b82f6; /* fct-light-blue */
+            box-shadow: 0 2px 10px rgba(30, 58, 138, 0.5);
+        }
+
+        /* Estilo para el Modal */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 50;
+        }
+
+        /* Responsividad de la tabla */
+        @media (max-width: 1024px) {
+            .table-responsive {
+                border: 1px solid #334155;
+            }
+            #defenses-table thead {
+                display: none; /* Oculta el encabezado de la tabla en móvil */
+            }
+            #defenses-table tr {
+                display: block;
+                margin-bottom: 0.75rem;
+                padding: 1rem;
+                border-bottom: 2px solid #334155;
+                border-radius: 0.5rem;
+            }
+            #defenses-table td {
+                display: flex;
+                flex-direction: column; /* Apilar contenido en móvil */
+                align-items: flex-start;
+                padding: 0.5rem 0;
+                border-bottom: 1px dotted #334155;
+            }
+            #defenses-table td:last-child {
+                border-bottom: none;
+            }
+            #defenses-table td::before {
+                /* Etiqueta para cada celda en móvil */
+                content: attr(data-label);
+                font-weight: 600;
+                color: #94a3b8; /* slate-400 */
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-fct-dark min-h-screen p-4 sm:p-8">
+
+    <!-- Header / Banner de la Expo -->
+    <header class="header-bg animation-gradient-shift rounded-xl shadow-2xl p-6 md:p-10 mb-8 flex flex-col justify-center items-center text-center border-4 border-white/30">
+        <p class="text-xs sm:text-sm font-semibold text-white/80 tracking-widest uppercase">FACULTAD DE CIENCIAS Y TECNOLOGÍA</p>
+        <h1 class="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-tight mt-2 drop-shadow-lg">
+            EXPO TECH <span class="text-fct-pink">2025</span>
+        </h1>
+        <p class="mt-4 text-sm sm:text-lg md:text-xl font-medium text-white/90 max-w-3xl">
+            Primer evento de presentación de trabajos de
+            <span class="font-bold">Infraestructura, Plataformas Tecnológicas y Redes (SIS313)</span> y
+            <span class="font-bold">Trabajando en la Nube (COM610)</span>.
+        </p>
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+            <div class="p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                <p class="text-sm font-semibold text-white">Miércoles 3 de Diciembre</p>
+                <p class="text-lg font-bold text-fct-pink">17:30 a 20:00</p>
+            </div>
+            <div class="p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                <p class="text-sm font-semibold text-white">Jueves 4 de Diciembre</p>
+                <p class="text-lg font-bold text-fct-pink">09:30 a 13:00</p>
+            </div>
+        </div>
+        <p class="mt-4 text-base font-semibold text-white/80">📍 Salón de Actos "Rosendo Carreras Fumaña"</p>
+    </header>
+
+    <!-- Sección Principal: Listado de Defensas y Calificación -->
+    <main class="container mx-auto p-4 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700">
+        <h2 class="text-3xl font-bold text-fct-light-blue mb-4 text-center">Calendario de Defensas y Calificación</h2>
+        
+        <!-- Pestañas de Día/Asignatura -->
+        <div class="flex flex-col sm:flex-row justify-center mb-6 gap-2 sm:gap-0">
+            <button id="tab-com610" onclick="switchDay('COM610')"
+                class="tab-button p-3 rounded-lg sm:rounded-t-lg sm:rounded-b-none text-base sm:text-xl border-t-2 border-x-2 border-gray-700/50 hover:bg-gray-700/50 mr-1 transition duration-150 ease-in-out">
+                Miércoles 3 (Nube - COM610)
+            </button>
+            <button id="tab-sis313" onclick="switchDay('SIS313')"
+                class="tab-button p-3 rounded-lg sm:rounded-t-lg sm:rounded-b-none text-base sm:text-xl border-t-2 border-x-2 border-gray-700/50 hover:bg-gray-700/50 ml-1 transition duration-150 ease-in-out">
+                Jueves 4 (Infraestructura - SIS313)
+            </button>
+        </div>
+
+        <div class="overflow-x-auto table-responsive">
+            <table id="defenses-table" class="min-w-full divide-y divide-gray-700 rounded-lg overflow-hidden">
+                <thead>
+                    <tr>
+                        <th scope="col" class="py-3 px-3 w-16 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-lg">Orden</th>
+                        <th scope="col" class="py-3 px-3 w-20 text-left text-xs font-semibold uppercase tracking-wider">Hora</th>
+                        <th scope="col" class="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider">Título del Proyecto</th>
+                        <th scope="col" class="py-3 px-3 w-1/4 text-left text-xs font-semibold uppercase tracking-wider">Integrantes</th>
+                        <th scope="col" class="py-3 px-3 w-20 text-center text-xs font-semibold uppercase tracking-wider">Repositorio</th>
+                        <th scope="col" class="py-3 px-3 w-20 text-center text-xs font-semibold uppercase tracking-wider rounded-tr-lg">Calificar</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-800">
+                    <!-- Los datos se inyectarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div id="no-data-message" class="text-center p-8 text-gray-500 hidden">
+            No hay defensas programadas para este día.
+        </div>
+    </main>
+
+    <!-- Modal de Aviso de Calificación No Disponible -->
+    <div id="statusModal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden">
+        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-2xl animate-modal-fade border-t-4 border-fct-pink">
+            <h3 class="text-2xl font-bold text-fct-pink mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-.942-2.306-.942-3.076 0L2.232 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                Evaluación Pendiente
+            </h3>
+            <p class="text-gray-300">
+                ¡Aún no está disponible! El enlace de calificación se habilitará justo antes de la defensa del grupo. Por favor, mantente atento y recarga la página.
+            </p>
+            <button onclick="closeModal()" class="mt-6 w-full bg-fct-light-blue hover:bg-fct-blue text-white font-bold py-2 px-4 rounded-lg transition duration-150">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer con fondo para contraste -->
+    <footer class="mt-8 bg-gray-900/90 py-4 px-8 rounded-xl shadow-lg border border-gray-800 text-center">
+        <p class="text-sm text-gray-400">Organizado por el <b>Ing. Lucio Marcelo Quispe Ortega</b> con el apoyo de la <b>Dirección de Carrera</b> y <b>Centro de Estudiantes</b></p>
+        <p class="text-xs text-gray-500 mt-1">
+            Carreras: Ingeniería de Sistemas, Ingeniería en Ciencias de la Computación, Ingeniería en Tecnología de la Información y Seguridad e Ingeniería en Telecomunicaciones.
+        </p>
+        <p class="text-sm font-semibold text-gray-300 mt-2">Universidad San Francisco Xavier de Chuquisaca - Facultad de Ciencia y Tecnología</p>
+    </footer>
+
+    <script>
+        let currentSubject = 'COM610'; // Estado inicial: Miércoles (COM610)
+
+        // --- 1. DATOS DE COM610 (Miércoles 3 - 17:30 a 20:00, 15 min/slot) ---
+        // Se han agregado las URLs mock (repoURL, califURL y projectURL)
+        let com610_groups = [
+            {
+                group: 'G-10',
+                members: 'Martinez Pardo Nisse Maximiliano<br>Paredes Paredes Naomy Yailin',
+                title: 'Despliegue Contínuo de WebApp "Facturación de Negocio" con GitHub Actions',
+                repoURL: 'https://github.com/nmmartinezp/facturacion-de-negocio',
+                califURL: null,
+                projectURL: 'http://3.231.230.180'
+            },
+            {
+                group: 'G-08',
+                members: 'Llanos Machuca Rene<br>Perez Torres Jhoyce Roxana',
+                title: 'Chat en Tiempo Real con Autoescalado',
+                repoURL: 'https://github.com/ReneLLaM/final-nube-chat-tiempo-real',
+                califURL: null, 
+                projectURL: 'https://com610-g8.rootcode.com.bo'
+            },
+            {
+                group: 'G-03',
+                members: 'Avendaño Duran Daniel<br>Fernandez Cabrera Luigi Alejandro',
+                title: 'Agente de Automatizacion de Testing Web',
+                repoURL: 'https://gitlab.com/DanielD/qa-agent',
+                califURL: null,
+                projectURL: null 
+            },
+            {
+                group: 'G-02',
+                members: 'Arduz Limpias Priscila Ximena<br>Quispe Jesús Cinthia<br>Villca Señoranis Sandra',
+                title: 'Despliegue en AWS con Balanceador de Carga, Auto Scaling y CDN mediante S3 y CloudFront',
+                repoURL: 'https://gitlab.com/sandra.usfx/sisctt-grupo2',
+                califURL: null,
+                projectURL: 'https://dy01jtff3u3a.cloudfront.net'
+            },
+            { 
+                group: 'G-01',
+                members: 'Aparicio Llanquipacha Gabriel',
+                title: 'Despliegue de Sistema Clínico Escalable en AWS con Arquitectura Hexagonal y Contenerización',
+                repoURL: 'https://github.com/Deus-Ex-Umbra/COM610-documentacion-proyecto-final',
+                califURL: null,
+                projectURL: null
+            },
+            {
+                group: 'G-06',
+                members: 'Huarachi Navarro Sergio Alejandro<br>Nuñez Condori Armando<br>Pinedo Quespi Rosicela',
+                title: 'Orquestación de Microservicios para Plataforma de Pedidos',
+                repoURL: 'https://github.com/RosIcelaRos/Orquestacion-de-microservicios-para-plataforma-de-pedidos',
+                califURL: null,
+                projectURL: null
+            },
+            {
+                group: 'G-09',
+                members: 'Peñaranda Anagua Emily Ana<br>Ramirez Leaños Jhon Erick<br>Vaquera Reyes Walter Benjamin',
+                title: 'Sin nombre',
+                repoURL: 'https://github.com/RosIcelaRos/Orquestacion-de-microservicios-para-plataforma-de-pedidos',
+                califURL: '', 
+                projectURL: null
+            },
+            {
+                group: 'G-04',
+                members: 'Calderón Flores Enrique Antonio<br>Crespo Rejas Jhamil',
+                title: 'Despliegue del Sistema de Gestión de Proyectos con Autoescalado y Almacenamiento de archivos en S3 en AWS',
+                repoURL: 'https://github.com/jhamilcr/com610-informe-final',
+                califURL: null,
+                projectURL: 'http://ec2-18-217-149-102.us-east-2.compute.amazonaws.com'
+            },
+            {
+                group: 'G-07',
+                members: 'Laime Gonzales Marco Antonio<br>Polo Serrano Marco',
+                title: 'Sin nombre',
+                repoURL: '',
+                califURL: '#',
+                projectURL: null
+            },
+        ];
+
+        let com610_defenses = [];
+        let com610_startTime = 17 * 60 + 30; // 17:30
+        const com610_slotDuration = 15; // 15 minutos
+
+        com610_groups.forEach((group, i) => {
+            const timeInMinutes = com610_startTime + (i * com610_slotDuration);
+            const hour = Math.floor(timeInMinutes / 60);
+            const minute = timeInMinutes % 60;
+            const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+            
+            com610_defenses.push({
+                order: i + 1,
+                day: 'Miércoles 3',
+                subject: 'COM610',
+                time: timeString,
+                ...group, // Ahora incluye repoURL, califURL y projectURL
+            });
+        });
+
+        // --- 2. DATOS DE SIS313 (Jueves 4 - 09:30 a 13:00, 10 min/slot) ---
+        // Se han agregado las URLs mock (repoURL, califURL y projectURL)
+        let sis313_groups = [
+            {
+                "group": "G-02",
+                "members": "Bayo Luizaga Freddy Ignacio<br>Ochoa Paz Erick Alexander<br>Vargas Paredes Jherson Efrain",
+                "title": "Sistema de Backups de Imágenes",
+                "repoURL": "https://github.com/JhendeFR/Infra_Proyect_Final",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-03",
+                "members": "Flores Aquino Nayely<br>Herrera David Jesus<br>Ovando Calizaya Paola Daniela<br>Salgueiro Gardeazabal Josué David",
+                "title": "Simulación de Red Universitaria",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-04",
+                "members": "Almanza Castro Hamilton Randall<br>Flores Padilla David Eduardo<br>Mamani Morales Cristhian Daniel<br>Villegas Arancibia Mateo Gabriel",
+                "title": "Sistema distribuido de respaldos automáticos",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-06",
+                "members": "Julian Joan Alexander<br>Pedraza Valverde Jose Maria<br>Sanchez Galarza Marco Antonio<br>Torres Balcera Rodrigo",
+                "title": "Portal Cautivo con Gestión de Consumo (GB/día) y Autenticación Universitaria",
+                "repoURL": "https://github.com/riguys123/SIS-313",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-07",
+                "members": "Castro Siñanis Jose Luis<br>Villca Araca Jhesica<br>Villena Mamani Alvaro Fabian",
+                "title": "Implementación de Servicio de Wiki Universitario con MediaWiki y Optimización de Rendimiento",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-08",
+                "members": "Chungara Choque Elizabeth<br>Cruz Trujillo Brayann Limberth<br>Mauricio Torrejon Miguel Angel",
+                "title": "Alta Disponibilidad – Tolerante a Fallas y Automatizado",
+                "repoURL": "https://github.com/Xharu/Alta-Disponibilidad",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-10",
+                "members": "Choque Arancibia Marvin Gustavo<br>Condori Ochoa Nayeli Faviola<br>Cordova Hinojosa Elvis<br>Mamani Condori Job Ismael",
+                "title": "Servicio de Hosting PyMES con ISPConfig para Soporte a Emprendedores",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": 'https://technova.rootcode.com.bo'
+            },
+            {
+                "group": "G-11",
+                "members": "Pomacahua Cardozo Benjamin<br>Quispe Gardeazabal Fernando Jose<br>Uzeda Rivera Alan Jesus<br>Villca Villca Jhoel Mauricio",
+                "title": "Diseño e Implementación de Plan de Backups Automatizado (Incremental y DRP)",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-12",
+                "members": "Durán Chambi Benjamín Ricardo<br>Escobar Moscoso Jorge Gabriel<br>Onofre Alanoca Roy",
+                "title": "Diseño e Implementación de un Sistema de Salas de Espera y Filas Virtuales (Virtual Queue)",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-13",
+                "members": "Campos Alfaro Dilan Domingo<br>Galvan Porcel Joel<br>Mamani Calizaya Jose Mario<br>Romero Morales Jhojan Erick",
+                "title": "Sentinel-LAN: Infraestructura de Almacenamiento Cifrado y Tolerante a Fallos",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": 'https://nextcloud.rootcode.com.bo'
+            },
+            {
+                "group": "G-15",
+                "members": "Lenis Diaz Nair<br>Tito Gonzales Edgar",
+                "title": "Implementación de VPN WireGuard en Topología Cliente-Servidor",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-16",
+                "members": "Huallpa Franses Luis Hernan<br>Lopez Yapu Marco<br>Yucra Caballero Rodrigo",
+                "title": "Plataforma de Mensajería Instantánea Segura con Alta Disponibilidad",
+                "repoURL": "https://github.com/marcoLzy/sis313-documentacion-proyecto-final",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-18",
+                "members": "García Vedia Jhoel Kevin<br>Limon Espinoza Yamil Santiago<br>Tosube Pinto Nataly",
+                "title": "Infraestructura Web Tolerante a Fallos",
+                "repoURL": "https://github.com/Yamilwz/SIS313_Infra_Estructura_Proyecto_Final.git",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-19",
+                "members": "Coraite Yanaje Luz Clara<br>Muraña Pizarro Nayda Thatiana<br>Rios Lizarazu Joaquin",
+                "title": "Implementación de Correo Corporativo de Alta Disponibilidad",
+                "repoURL": "",
+                "califURL": null,
+                "projectURL": null
+            },
+            {
+                "group": "G-21",
+                "members": "Huanca Coronado Oscar Santiago<br>Mollinedo Siles Renzo Sebastian<br>Quispe Zarate Franky<br>Vargas Alarcón Brayan Mario",
+                "title": "LocalCloud Gaming: Infraestructura Distribuida de Servidores de Juego",
+                "repoURL": "https://github.com/QZFfranky011223/G21-LocalCloud-Gaming",
+                "califURL": null,
+                "projectURL": null
+            }
+            ];
+
+        let sis313_defenses = [];
+        let sis313_startTime = 9 * 60 + 30; // 09:30
+        const sis313_slotDuration = 15; // 10 minutos
+
+        sis313_groups.forEach((group, i) => {
+            const timeInMinutes = sis313_startTime + (i * sis313_slotDuration);
+            const hour = Math.floor(timeInMinutes / 60);
+            const minute = timeInMinutes % 60;
+            const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+
+            sis313_defenses.push({
+                order: i + 1,
+                day: 'Jueves 4',
+                subject: 'SIS313',
+                time: timeString,
+                ...group, // Ahora incluye repoURL, califURL y projectURL
+            });
+        });
+
+        const allDefensesData = [...com610_defenses, ...sis313_defenses];
+
+        // Función para abrir el modal de aviso
+        function showModal() {
+            document.getElementById('statusModal').classList.remove('hidden');
+        }
+
+        // Función para cerrar el modal de aviso
+        function closeModal() {
+            document.getElementById('statusModal').classList.add('hidden');
+        }
+
+        // Manejador del click en Calificar
+        function handleCalificarClick(event, califURL) {
+            // Se actualizó la lógica para incluir la validación de cadena vacía ('')
+            // Previene la navegación si la URL es el placeholder ('#'), nula (null) o vacía ('')
+            if (califURL === '#' || califURL === null || califURL === '') {
+                event.preventDefault();
+                showModal();
+            }
+            // Si la URL es válida, la navegación ocurre normalmente
+        }
+
+        // Función para cambiar la pestaña activa
+        function switchDay(subject) {
+            currentSubject = subject;
+            
+            // Actualizar clases de botones
+            const tabCom610 = document.getElementById('tab-com610');
+            const tabSis313 = document.getElementById('tab-sis313');
+
+            tabCom610.className = 'tab-button p-3 rounded-lg sm:rounded-t-lg sm:rounded-b-none text-base sm:text-xl border-t-2 border-x-2 border-gray-700/50 hover:bg-gray-700/50 mr-1 transition duration-150 ease-in-out ' + (subject === 'COM610' ? 'tab-active-COM610' : 'bg-gray-800/50 text-gray-400');
+            tabSis313.className = 'tab-button p-3 rounded-lg sm:rounded-t-lg sm:rounded-b-none text-base sm:text-xl border-t-2 border-x-2 border-gray-700/50 hover:bg-gray-700/50 ml-1 transition duration-150 ease-in-out ' + (subject === 'SIS313' ? 'tab-active-SIS313' : 'bg-gray-800/50 text-gray-400');
+            
+            renderDefenses();
+        }
+
+        // Función para renderizar la tabla con los datos filtrados
+        function renderDefenses() {
+            const tableBody = document.querySelector('#defenses-table tbody');
+            const noDataMessage = document.getElementById('no-data-message');
+            const filteredData = allDefensesData.filter(item => item.subject === currentSubject);
+            
+            tableBody.innerHTML = ''; 
+
+            if (filteredData.length === 0) {
+                noDataMessage.classList.remove('hidden');
+                return;
+            }
+            noDataMessage.classList.add('hidden');
+
+            filteredData.forEach(item => {
+                // Crear el botón de Proyecto COMPACTO si existe la URL
+                const projectButton = item.projectURL ? `
+                    <br><a href="${item.projectURL}" target="_blank" rel="noopener noreferrer" 
+                        class="btn-proyecto-compact inline-flex items-center justify-center p-1 px-2 mt-1 rounded-full text-white font-semibold text-xs shadow-md hover:shadow-lg transition duration-150 ease-in-out">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 3a1 1 0 100 2h2.293l-4.793 4.793a1 1 0 001.414 1.414L14 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                        Ver Proyecto
+                    </a>
+                ` : '';
+
+                // Contenido de la celda de Repositorio (condicional)
+                const repoButtonContent = (item.repoURL && item.repoURL !== '#' && item.repoURL !== '') ? `
+                    <a href="${item.repoURL}" target="_blank" rel="noopener noreferrer" 
+                        class="btn-repositorio inline-flex items-center justify-center p-2 rounded-lg text-white font-semibold text-sm shadow-md hover:shadow-lg transition duration-150 ease-in-out w-full max-w-[150px] mx-auto">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        Ver
+                    </a>
+                ` : '<span class="text-gray-500 text-sm italic">No disponible</span>';
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-700/50 transition duration-150 ease-in-out';
+
+                // Se añadió 'align-middle' a todas las celdas para centrado vertical
+                row.innerHTML = `
+                    <td class="py-3 px-3 whitespace-nowrap font-bold text-fct-pink align-middle" data-label="Orden:">${item.order}</td>
+                    <td class="py-3 px-3 whitespace-nowrap text-white font-medium align-middle" data-label="Hora:">${item.time}</td>
+                    
+                    <!-- Columna de Título: 'align-middle' para centrado vertical -->
+                    <td class="py-3 px-3 max-w-xs xl:max-w-none break-words items-start align-middle" data-label="Proyecto:">
+                        <span class="font-semibold text-white">${item.title}</span>
+                        ${projectButton}
+                        <p class="text-xs text-gray-500 mt-1 sm:hidden">Grupo: ${item.group}</p>
+                    </td>
+
+                    <td class="py-3 px-3 text-sm text-gray-400 align-middle" data-label="Integrantes:">${item.members}</td>
+                    
+                    <!-- Botón Repositorio (contenido condicional) -->
+                    <td class="py-3 px-3 text-center align-middle" data-label="Repositorio:">
+                        ${repoButtonContent}
+                    </td>
+
+                    <!-- Botón Calificar (mantiene la lógica de click condicional) -->
+                    <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
+                        <a href="${item.califURL}" target="_blank" rel="noopener noreferrer" 
+                           onclick="handleCalificarClick(event, '${item.califURL}')"
+                           class="btn-calificacion inline-flex items-center justify-center p-2 rounded-lg text-white font-bold text-sm shadow-xl transition duration-300 ease-in-out w-full max-w-[150px] mx-auto">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.004 8.73c-.784-.57-.382-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            ¡Evaluar!
+                        </a>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Inicializar la vista
+        document.addEventListener('DOMContentLoaded', () => {
+            // Renderiza por defecto el día Miércoles (COM610) y establece la clase activa.
+            switchDay('COM610');
+        });
+    </script>
+</body>
+</html>
