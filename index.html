@@ -153,6 +153,18 @@
             z-index: 50;
         }
 
+        /* Estilo para las medallas SVG para mejor visualización */
+        .medal-icon {
+            /* Sombra para hacerlas resaltar */
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7));
+        }
+
+        /* Estilo específico para la cinta de la medalla (para que no parezca un círculo simple) */
+        .medal-icon .ribbon-bg {
+            fill: #9CA3AF; /* Gris de la cinta */
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+        }
+
         /* Responsividad de la tabla */
         @media (max-width: 1024px) {
             .table-responsive {
@@ -260,6 +272,28 @@
         <div id="no-data-message" class="text-center p-8 text-gray-500 hidden">
             No hay defensas programadas para este día.
         </div>
+
+        <!-- Leyenda de Premios -->
+        <div class="mt-6 p-4 bg-gray-800 rounded-lg text-sm text-gray-400">
+            <p class="font-bold text-white mb-2">Leyenda de Clasificación:</p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <span class="flex items-center">
+                    <!-- SVG de Medalla de Oro para Leyenda -->
+                    <svg class="w-6 h-6 mr-1 medal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><radialGradient id="gold-grad-legend" cx="50%" cy="50%" r="50%" fx="60%" fy="60%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#B8860B"/></radialGradient></defs><rect x="9" y="1" width="6" height="4" rx="1" ry="1" class="ribbon-bg"/><circle cx="12" cy="14" r="7" fill="url(#gold-grad-legend)"/><text x="12" y="16.5" font-family="Arial, sans-serif" font-size="8" font-weight="900" text-anchor="middle" fill="#000">1</text></svg>
+                    1° Lugar (Oro)
+                </span>
+                <span class="flex items-center">
+                    <!-- SVG de Medalla de Plata para Leyenda -->
+                    <svg class="w-6 h-6 mr-1 medal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><radialGradient id="silver-grad-legend" cx="50%" cy="50%" r="50%" fx="60%" fy="60%"><stop offset="0%" style="stop-color:#E5E4E2"/><stop offset="100%" style="stop-color:#A9A9A9"/></radialGradient></defs><rect x="9" y="1" width="6" height="4" rx="1" ry="1" class="ribbon-bg"/><circle cx="12" cy="14" r="7" fill="url(#silver-grad-legend)"/><text x="12" y="16.5" font-family="Arial, sans-serif" font-size="8" font-weight="900" text-anchor="middle" fill="#000">2</text></svg>
+                    2° Lugar (Plata)
+                </span>
+                <span class="flex items-center">
+                    <!-- SVG de Medalla de Bronce para Leyenda -->
+                    <svg class="w-6 h-6 mr-1 medal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><radialGradient id="bronze-grad-legend" cx="50%" cy="50%" r="50%" fx="60%" fy="60%"><stop offset="0%" style="stop-color:#CD7F32"/><stop offset="100%" style="stop-color:#8B4513"/></radialGradient></defs><rect x="9" y="1" width="6" height="4" rx="1" ry="1" class="ribbon-bg"/><circle cx="12" cy="14" r="7" fill="url(#bronze-grad-legend)"/><text x="12" y="16.5" font-family="Arial, sans-serif" font-size="8" font-weight="900" text-anchor="middle" fill="#FFF">3</text></svg>
+                    3° Lugar (Bronce)
+                </span>
+            </div>
+        </div>
     </main>
 
     <!-- Modal de Aviso de Calificación No Disponible -->
@@ -288,7 +322,60 @@
     </footer>
 
     <script>
-        let currentSubject = 'COM610'; // Estado inicial: Miércoles (COM610)
+        let currentSubject = 'SIS313'; // Estado inicial: Miércoles (COM610)
+
+        // --- FUNCIÓN PARA GENERAR EL SVG DE LA MEDALLA (MEJORADA con forma y degradados) ---
+        function getMedalSVG(place) {
+            if (!place || (place < 1 || place > 3)) return '';
+            
+            const colors = {
+                1: { 
+                    id: 'gold-grad', 
+                    title: '1° Lugar - Oro', 
+                    stop1: '#FFD700', // Amarillo brillante
+                    stop2: '#B8860B', // Marrón oscuro (para profundidad)
+                    textColor: '#000'
+                },
+                2: { 
+                    id: 'silver-grad', 
+                    title: '2° Lugar - Plata', 
+                    stop1: '#E5E4E2', // Plata claro
+                    stop2: '#A9A9A9', // Gris oscuro
+                    textColor: '#000'
+                },
+                3: { 
+                    id: 'bronze-grad', 
+                    title: '3° Lugar - Bronce', 
+                    stop1: '#CD7F32', // Bronce medio
+                    stop2: '#8B4513', // Café oscuro (para profundidad)
+                    textColor: '#FFF' // Texto blanco para mejor contraste en bronce
+                }
+            };
+            const medal = colors[place];
+            if (!medal) return '';
+
+            // El id del degradado se hace dinámico para evitar conflictos en el DOM si hubiera múltiples usos fuera de la leyenda.
+            const uniqueId = `${medal.id}-${place}`;
+
+            return `
+                <span title="${medal.title}" class="flex-shrink-0 medal-icon transition duration-150 ease-in-out hover:scale-110 mr-1">
+                    <svg class="w-6 h-6 inline-block align-middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <defs>
+                            <radialGradient id="${uniqueId}" cx="50%" cy="50%" r="50%" fx="60%" fy="60%">
+                                <stop offset="0%" style="stop-color:${medal.stop1}"/>
+                                <stop offset="100%" style="stop-color:${medal.stop2}"/>
+                            </radialGradient>
+                        </defs>
+                        <!-- Soporte de la medalla (ribbon-bg definido en <style>) -->
+                        <rect x="9" y="1" width="6" height="4" rx="1" ry="1" class="ribbon-bg"/>
+                        <!-- Medalla principal con el degradado -->
+                        <circle cx="12" cy="14" r="7" fill="url(#${uniqueId})"/>
+                        <!-- Número del puesto -->
+                        <text x="12" y="16.5" font-family="Arial, sans-serif" font-size="8" font-weight="900" text-anchor="middle" fill="${medal.textColor}">${place}</text>
+                    </svg>
+                </span>
+            `;
+        }
 
         // --- 1. DATOS DE COM610 (Miércoles 3 - 17:30 a 20:00, 15 min/slot) ---
         // Se han agregado las URLs mock (repoURL, califURL y projectURL)
@@ -298,72 +385,81 @@
                 members: 'Martinez Pardo Nisse Maximiliano<br>Paredes Paredes Naomy Yailin',
                 title: 'Despliegue Contínuo de WebApp "Facturación de Negocio" con GitHub Actions',
                 repoURL: 'https://github.com/nmmartinezp/facturacion-de-negocio',
-                califURL: 'https://forms.gle/M2zAT3brHBaBfdd3A',
-                projectURL: 'http://3.231.230.180'
+                califURL: '#',
+                projectURL: '',
+                place: null
             },
             {
                 group: 'G-08',
                 members: 'Llanos Machuca Rene<br>Perez Torres Jhoyce Roxana',
                 title: 'Chat en Tiempo Real con Autoescalado',
                 repoURL: 'https://github.com/ReneLLaM/final-nube-chat-tiempo-real',
-                califURL: 'https://forms.gle/hsu6K3TJiQAzUkS69', 
-                projectURL: 'https://com610-g8.rootcode.com.bo'
+                califURL: '#', 
+                projectURL: '',
+                place: 3
             },
             {
                 group: 'G-03',
                 members: 'Avendaño Duran Daniel<br>Fernandez Cabrera Luigi Alejandro',
                 title: 'Agente de Automatizacion de Testing Web',
                 repoURL: 'https://gitlab.com/DanielD/qa-agent',
-                califURL: 'https://forms.gle/zoh98PeBBsas7NG37',
-                projectURL: '' 
+                califURL: '#',
+                projectURL: '',
+                place: null
             },
             {
                 group: 'G-02',
                 members: 'Arduz Limpias Priscila Ximena<br>Quispe Jesús Cinthia<br>Villca Señoranis Sandra',
                 title: 'Despliegue en AWS con Balanceador de Carga, Auto Scaling y CDN mediante S3 y CloudFront',
                 repoURL: 'https://gitlab.com/sandra.usfx/sisctt-grupo2',
-                califURL: 'https://forms.gle/i1nf8peRYCFTTaDo7',
-                projectURL: 'https://dy01jtff3u3a.cloudfront.net'
+                califURL: '#',
+                projectURL: '',
+                place: null
             },
             { 
                 group: 'G-01',
                 members: 'Aparicio Llanquipacha Gabriel',
                 title: 'Despliegue de Sistema Clínico Escalable en AWS con Arquitectura Hexagonal y Contenerización',
                 repoURL: 'https://github.com/Deus-Ex-Umbra/COM610-documentacion-proyecto-final',
-                califURL: 'https://forms.gle/rwvMmXMSF27x4pT47',
-                projectURL: ''
+                califURL: '#',
+                projectURL: '',
+                place: null
             },
             {
                 group: 'G-06',
                 members: 'Huarachi Navarro Sergio Alejandro<br>Nuñez Condori Armando<br>Pinedo Quespi Rosicela',
                 title: 'Orquestación de Microservicios para Plataforma de Pedidos',
-                repoURL: 'https://github.com/RosIcelaRos/Orquestacion-de-microservicios-para-plataforma-de-pedidos',
-                califURL: 'https://forms.gle/rMF6M7WjV6P2Muev8',
-                projectURL: ''
+                repoURL: 'https://github.com/armandonum/Yalita-Services.git',
+                califURL: '#',
+                projectURL: '',
+                place: 2
             },
             {
                 group: 'G-09',
                 members: 'Peñaranda Anagua Emily Ana<br>Ramirez Leaños Jhon Erick<br>Vaquera Reyes Walter Benjamin',
                 title: 'Sin nombre',
                 repoURL: '',
-                califURL: 'https://forms.gle/xJcrE4Hs9f1xM7hn9', 
-                projectURL: ''
+                califURL: '#', 
+                projectURL: '',
+                place: null
             },
             {
                 group: 'G-04',
                 members: 'Calderón Flores Enrique Antonio<br>Crespo Rejas Jhamil',
                 title: 'Despliegue del Sistema de Gestión de Proyectos con Autoescalado y Almacenamiento de archivos en S3 en AWS',
                 repoURL: 'https://github.com/jhamilcr/com610-informe-final',
-                califURL: 'https://forms.gle/pLxBtu4yv9AhnSF1A',
-                projectURL: 'http://ec2-18-217-149-102.us-east-2.compute.amazonaws.com'
+                califURL: '#',
+                projectURL: '',
+                place: 1
             },
             {
                 group: 'G-07',
                 members: 'Laime Gonzales Marco Antonio<br>Polo Serrano Marco',
-                title: 'Sin nombre',
+                title: 'Software de Dibujo guiado con Inteligencia Artificial implementado en una Arquitectura de 3 capas',
                 repoURL: '',
-                califURL: 'https://forms.gle/e4ccSk1DfLLTZs1c7',
-                projectURL: ''
+                califURL: '#',
+                projectURL: '',
+                place: null
             },
         ];
 
@@ -409,7 +505,7 @@
                 "group": "G-04",
                 "members": "Almanza Castro Hamilton Randall<br>Flores Padilla David Eduardo<br>Mamani Morales Cristhian Daniel<br>Villegas Arancibia Mateo Gabriel",
                 "title": "Sistema distribuido de respaldos automáticos",
-                "repoURL": "",
+                "repoURL": "https://github.com/HamiltonAlmanza/Proyecto-final-Infraestructura",
                 "califURL": "",
                 "projectURL": ""
             },
@@ -425,7 +521,7 @@
                 "group": "G-07",
                 "members": "Castro Siñanis Jose Luis<br>Villca Araca Jhesica<br>Villena Mamani Alvaro Fabian",
                 "title": "Implementación de Servicio de Wiki Universitario con MediaWiki y Optimización de Rendimiento",
-                "repoURL": "",
+                "repoURL": "https://github.com/AlvaroFab28/WikiMedia",
                 "califURL": "",
                 "projectURL": ""
             },
@@ -441,7 +537,7 @@
                 "group": "G-10",
                 "members": "Choque Arancibia Marvin Gustavo<br>Condori Ochoa Nayeli Faviola<br>Cordova Hinojosa Elvis<br>Mamani Condori Job Ismael",
                 "title": "Servicio de Hosting PyMES con ISPConfig para Soporte a Emprendedores",
-                "repoURL": "",
+                "repoURL": "https://github.com/proyectofinalipsconfg/ISPConfig_Grupo10",
                 "califURL": "",
                 "projectURL": 'https://technova.rootcode.com.bo'
             },
@@ -449,7 +545,7 @@
                 "group": "G-11",
                 "members": "Pomacahua Cardozo Benjamin<br>Quispe Gardeazabal Fernando Jose<br>Uzeda Rivera Alan Jesus<br>Villca Villca Jhoel Mauricio",
                 "title": "Diseño e Implementación de Plan de Backups Automatizado (Incremental y DRP)",
-                "repoURL": "",
+                "repoURL": "https://github.com/JhoelVillca/sis313-documentacion-proyecto-final",
                 "califURL": "",
                 "projectURL": ""
             },
@@ -457,7 +553,7 @@
                 "group": "G-12",
                 "members": "Durán Chambi Benjamín Ricardo<br>Escobar Moscoso Jorge Gabriel<br>Onofre Alanoca Roy",
                 "title": "Diseño e Implementación de un Sistema de Salas de Espera y Filas Virtuales (Virtual Queue)",
-                "repoURL": "",
+                "repoURL": "https://github.com/ricmax945/proyecto-SIS313",
                 "califURL": "",
                 "projectURL": ""
             },
@@ -497,7 +593,7 @@
                 "group": "G-19",
                 "members": "Coraite Yanaje Luz Clara<br>Muraña Pizarro Nayda Thatiana<br>Rios Lizarazu Joaquin",
                 "title": "Implementación de Correo Corporativo de Alta Disponibilidad",
-                "repoURL": "",
+                "repoURL": "https://github.com/lcoraiteyanaje-ship-it/Documento-de-proyecto-final-/blob/main/README.md",
                 "califURL": "",
                 "projectURL": ""
             },
@@ -603,6 +699,9 @@
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-700/50 transition duration-150 ease-in-out';
 
+                // Obtener el ícono de la medalla
+                const medalIcon = getMedalSVG(item.place);
+
                 // Se añadió 'align-middle' a todas las celdas para centrado vertical
                 row.innerHTML = `
                     <td class="py-3 px-3 whitespace-nowrap font-bold text-fct-pink align-middle" data-label="Orden:">${item.order}</td>
@@ -610,7 +709,7 @@
                     
                     <!-- Columna de Título: 'align-middle' para centrado vertical -->
                     <td class="py-3 px-3 max-w-xs xl:max-w-none break-words items-start align-middle" data-label="Proyecto:">
-                        <span class="font-semibold text-white">${item.title}</span>
+                        <span class="font-semibold text-white">${medalIcon} ${item.title}</span>
                         ${projectButton}
                         <p class="text-xs text-gray-500 mt-1 sm:hidden">Grupo: ${item.group}</p>
                     </td>
@@ -621,17 +720,29 @@
                     <td class="py-3 px-3 text-center align-middle" data-label="Repositorio:">
                         ${repoButtonContent}
                     </td>
-
-                    <!-- Botón Calificar (mantiene la lógica de click condicional) -->
-                    <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
-                        <a href="${item.califURL}" target="_blank" rel="noopener noreferrer" 
-                           onclick="handleCalificarClick(event, '${item.califURL}')"
-                           class="btn-calificacion inline-flex items-center justify-center p-2 rounded-lg text-white font-bold text-sm shadow-xl transition duration-300 ease-in-out w-full max-w-[150px] mx-auto">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.004 8.73c-.784-.57-.382-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            ¡Evaluar!
-                        </a>
-                    </td>
                 `;
+
+                // Se añadió 'align-middle' a todas las celdas para centrado vertical
+                if (item.califURL != '#') {
+                    row.innerHTML += `
+                        <!-- Botón Calificar (mantiene la lógica de click condicional) -->
+                        <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
+                            <a href="${item.califURL}" target="_blank" rel="noopener noreferrer" 
+                            onclick="handleCalificarClick(event, '${item.califURL}')"
+                            class="btn-calificacion inline-flex items-center justify-center p-2 rounded-lg text-white font-bold text-sm shadow-xl transition duration-300 ease-in-out w-full max-w-[150px] mx-auto">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.004 8.73c-.784-.57-.382-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                ¡Evaluar!
+                            </a>
+                        </td>
+                    `;
+                } else {
+                    row.innerHTML += `
+                        <!-- Botón Calificar (mantiene la lógica de click condicional) -->
+                        <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
+                            
+                        </td>
+                    `;
+                }
                 tableBody.appendChild(row);
             });
         }
@@ -639,7 +750,7 @@
         // Inicializar la vista
         document.addEventListener('DOMContentLoaded', () => {
             // Renderiza por defecto el día Miércoles (COM610) y establece la clase activa.
-            switchDay('COM610');
+            switchDay('SIS313');
         });
     </script>
 </body>
