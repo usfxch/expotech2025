@@ -238,7 +238,7 @@
 
     <!-- Sección Principal: Listado de Defensas y Calificación -->
     <main class="container mx-auto p-4 bg-gray-900/80 rounded-xl shadow-lg border border-gray-700">
-        <h2 class="text-3xl font-bold text-fct-light-blue mb-4 text-center">Calendario de Exposiciones</h2>
+        <h2 class="text-3xl font-bold text-fct-light-blue mb-4 text-center">Exposiciones</h2>
         
         <!-- Pestañas de Día/Asignatura -->
         <div class="flex flex-col sm:flex-row justify-center mb-6 gap-2 sm:gap-0">
@@ -256,12 +256,10 @@
             <table id="defenses-table" class="min-w-full divide-y divide-gray-700 rounded-lg overflow-hidden">
                 <thead>
                     <tr>
-                        <th scope="col" class="py-3 px-3 w-16 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-lg">Orden</th>
-                        <th scope="col" class="py-3 px-3 w-20 text-left text-xs font-semibold uppercase tracking-wider">Hora</th>
+                        <th scope="col" class="py-3 px-3 w-16 text-left text-xs font-semibold uppercase tracking-wider rounded-tl-lg">Posición</th>
                         <th scope="col" class="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider">Título del Proyecto</th>
                         <th scope="col" class="py-3 px-3 w-1/4 text-left text-xs font-semibold uppercase tracking-wider">Integrantes</th>
                         <th scope="col" class="py-3 px-3 w-20 text-center text-xs font-semibold uppercase tracking-wider">Repositorio</th>
-                        <th scope="col" class="py-3 px-3 w-20 text-center text-xs font-semibold uppercase tracking-wider rounded-tr-lg">Calificar</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-800">
@@ -381,13 +379,22 @@
         // Se han agregado las URLs mock (repoURL, califURL y projectURL)
         let com610_groups = [
             {
-                group: 'G-10',
-                members: 'Martinez Pardo Nisse Maximiliano<br>Paredes Paredes Naomy Yailin',
-                title: 'Despliegue Contínuo de WebApp "Facturación de Negocio" con GitHub Actions',
-                repoURL: 'https://github.com/nmmartinezp/facturacion-de-negocio',
+                group: 'G-04',
+                members: 'Calderón Flores Enrique Antonio<br>Crespo Rejas Jhamil',
+                title: 'Despliegue del Sistema de Gestión de Proyectos con Autoescalado y Almacenamiento de archivos en S3 en AWS',
+                repoURL: 'https://github.com/jhamilcr/com610-informe-final',
                 califURL: '#',
                 projectURL: '',
-                place: null
+                place: 1
+            },
+            {
+                group: 'G-06',
+                members: 'Huarachi Navarro Sergio Alejandro<br>Nuñez Condori Armando<br>Pinedo Quespi Rosicela',
+                title: 'Orquestación de Microservicios para Plataforma de Pedidos',
+                repoURL: 'https://github.com/armandonum/Yalita-Services.git',
+                califURL: '#',
+                projectURL: '',
+                place: 2
             },
             {
                 group: 'G-08',
@@ -398,11 +405,20 @@
                 projectURL: '',
                 place: 3
             },
+            { 
+                group: 'G-01',
+                members: 'Aparicio Llanquipacha Gabriel',
+                title: 'Despliegue de Sistema Clínico Escalable en AWS con Arquitectura Hexagonal y Contenerización',
+                repoURL: 'https://github.com/Deus-Ex-Umbra/COM610-documentacion-proyecto-final',
+                califURL: '#',
+                projectURL: '',
+                place: null
+            },
             {
-                group: 'G-03',
-                members: 'Avendaño Duran Daniel<br>Fernandez Cabrera Luigi Alejandro',
-                title: 'Agente de Automatizacion de Testing Web',
-                repoURL: 'https://gitlab.com/DanielD/qa-agent',
+                group: 'G-10',
+                members: 'Martinez Pardo Nisse Maximiliano<br>Paredes Paredes Naomy Yailin',
+                title: 'Despliegue Contínuo de WebApp "Facturación de Negocio" con GitHub Actions',
+                repoURL: 'https://github.com/nmmartinezp/facturacion-de-negocio',
                 califURL: '#',
                 projectURL: '',
                 place: null
@@ -416,41 +432,23 @@
                 projectURL: '',
                 place: null
             },
-            { 
-                group: 'G-01',
-                members: 'Aparicio Llanquipacha Gabriel',
-                title: 'Despliegue de Sistema Clínico Escalable en AWS con Arquitectura Hexagonal y Contenerización',
-                repoURL: 'https://github.com/Deus-Ex-Umbra/COM610-documentacion-proyecto-final',
+            {
+                group: 'G-03',
+                members: 'Avendaño Duran Daniel<br>Fernandez Cabrera Luigi Alejandro',
+                title: 'Agente de Automatizacion de Testing Web',
+                repoURL: 'https://gitlab.com/DanielD/qa-agent',
                 califURL: '#',
                 projectURL: '',
                 place: null
-            },
-            {
-                group: 'G-06',
-                members: 'Huarachi Navarro Sergio Alejandro<br>Nuñez Condori Armando<br>Pinedo Quespi Rosicela',
-                title: 'Orquestación de Microservicios para Plataforma de Pedidos',
-                repoURL: 'https://github.com/armandonum/Yalita-Services.git',
-                califURL: '#',
-                projectURL: '',
-                place: 2
             },
             {
                 group: 'G-09',
                 members: 'Peñaranda Anagua Emily Ana<br>Ramirez Leaños Jhon Erick<br>Vaquera Reyes Walter Benjamin',
-                title: 'Sin nombre',
-                repoURL: '',
+                title: 'Ticketing - Microservicios (Dockerized)',
+                repoURL: 'https://github.com/WimmyP/computacion-nube-grupo-9',
                 califURL: '#', 
                 projectURL: '',
                 place: null
-            },
-            {
-                group: 'G-04',
-                members: 'Calderón Flores Enrique Antonio<br>Crespo Rejas Jhamil',
-                title: 'Despliegue del Sistema de Gestión de Proyectos con Autoescalado y Almacenamiento de archivos en S3 en AWS',
-                repoURL: 'https://github.com/jhamilcr/com610-informe-final',
-                califURL: '#',
-                projectURL: '',
-                place: 1
             },
             {
                 group: 'G-07',
@@ -486,52 +484,13 @@
         // Se han agregado las URLs mock (repoURL, califURL y projectURL)
         let sis313_groups = [
             {
-                "group": "G-02",
-                "members": "Bayo Luizaga Freddy Ignacio<br>Ochoa Paz Erick Alexander<br>Vargas Paredes Jherson Efrain",
-                "title": "Photo Backup Seguro",
-                "repoURL": "https://github.com/JhendeFR/Infra_Proyect_Final",
-                "califURL": "#",
-                "projectURL": ""
-            },
-            {
-                "group": "G-03",
-                "members": "Flores Aquino Nayely<br>Herrera David Jesus<br>Ovando Calizaya Paola Daniela<br>Salgueiro Gardeazabal Josué David",
-                "title": "Simulación de Red Universitaria",
-                "repoURL": "",
-                "califURL": "#",
-                "projectURL": ""
-            },
-            {
-                "group": "G-04",
-                "members": "Almanza Castro Hamilton Randall<br>Flores Padilla David Eduardo<br>Mamani Morales Cristhian Daniel<br>Villegas Arancibia Mateo Gabriel",
-                "title": "Sistema distribuido de respaldos automáticos",
-                "repoURL": "https://github.com/HamiltonAlmanza/Proyecto-final-Infraestructura",
-                "califURL": "#",
-                "projectURL": ""
-            },
-            {
-                "group": "G-06",
-                "members": "Julian Joan Alexander<br>Pedraza Valverde Jose Maria<br>Sanchez Galarza Marco Antonio<br>Torres Balcera Rodrigo",
-                "title": "Portal Cautivo con Gestión de Consumo (GB/día) y Autenticación Universitaria",
-                "repoURL": "https://github.com/riguys123/SIS-313",
-                "califURL": "#",
-                "projectURL": ""
-            },
-            {
-                "group": "G-07",
-                "members": "Castro Siñanis Jose Luis<br>Villca Araca Jhesica<br>Villena Mamani Alvaro Fabian",
-                "title": "Implementación de Servicio de Wiki Universitario con MediaWiki y Optimización de Rendimiento",
-                "repoURL": "https://github.com/AlvaroFab28/WikiMedia",
-                "califURL": "#",
-                "projectURL": ""
-            },
-            {
                 "group": "G-08",
                 "members": "Chungara Choque Elizabeth<br>Cruz Trujillo Brayann Limberth<br>Mauricio Torrejon Miguel Angel",
                 "title": "Alta Disponibilidad – Tolerante a Fallas y Automatizado",
                 "repoURL": "https://github.com/Xharu/Alta-Disponibilidad",
                 "califURL": "#",
-                "projectURL": ""
+                "projectURL": "",
+                "place": 1
             },
             {
                 "group": "G-10",
@@ -539,23 +498,17 @@
                 "title": "Servicio de Hosting PyMES con ISPConfig para Soporte a Emprendedores",
                 "repoURL": "https://github.com/proyectofinalipsconfg/ISPConfig_Grupo10",
                 "califURL": "#",
-                "projectURL": 'https://technova.rootcode.com.bo'
+                "projectURL": 'https://technova.rootcode.com.bo',
+                "place": 2
             },
             {
-                "group": "G-11",
-                "members": "Pomacahua Cardozo Benjamin<br>Quispe Gardeazabal Fernando Jose<br>Uzeda Rivera Alan Jesus<br>Villca Villca Jhoel Mauricio",
-                "title": "Diseño e Implementación de Plan de Backups Automatizado (Incremental y DRP)",
-                "repoURL": "https://github.com/JhoelVillca/sis313-documentacion-proyecto-final",
+                "group": "G-07",
+                "members": "Castro Siñanis Jose Luis<br>Villca Araca Jhesica<br>Villena Mamani Alvaro Fabian",
+                "title": "Implementación de Servicio de Wiki Universitario con MediaWiki y Optimización de Rendimiento",
+                "repoURL": "https://github.com/AlvaroFab28/WikiMedia",
                 "califURL": "#",
-                "projectURL": ""
-            },
-            {
-                "group": "G-12",
-                "members": "Durán Chambi Benjamín Ricardo<br>Escobar Moscoso Jorge Gabriel<br>Onofre Alanoca Roy",
-                "title": "Diseño e Implementación de un Sistema de Salas de Espera y Filas Virtuales (Virtual Queue)",
-                "repoURL": "https://github.com/ricmax945/proyecto-SIS313",
-                "califURL": "#",
-                "projectURL": ""
+                "projectURL": "",
+                "place": 3
             },
             {
                 "group": "G-13",
@@ -566,6 +519,14 @@
                 "projectURL": 'https://nextcloud.rootcode.com.bo'
             },
             {
+                "group": "G-16",
+                "members": "Huallpa Franses Luis Hernan<br>Lopez Yapu Marco<br>Yucra Caballero Rodrigo",
+                "title": "Plataforma de Mensajería Instantánea Segura con Alta Disponibilidad",
+                "repoURL": "https://github.com/marcoLzy/sis313-documentacion-proyecto-final",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
                 "group": "G-15",
                 "members": "Lenis Diaz Nair<br>Tito Gonzales Edgar",
                 "title": "Implementación de VPN WireGuard en Topología Cliente-Servidor",
@@ -574,10 +535,10 @@
                 "projectURL": ""
             },
             {
-                "group": "G-16",
-                "members": "Huallpa Franses Luis Hernan<br>Lopez Yapu Marco<br>Yucra Caballero Rodrigo",
-                "title": "Plataforma de Mensajería Instantánea Segura con Alta Disponibilidad",
-                "repoURL": "https://github.com/marcoLzy/sis313-documentacion-proyecto-final",
+                "group": "G-21",
+                "members": "Huanca Coronado Oscar Santiago<br>Mollinedo Siles Renzo Sebastian<br>Quispe Zarate Franky<br>Vargas Alarcón Brayan Mario",
+                "title": "LocalCloud Gaming: Infraestructura Distribuida de Servidores de Juego",
+                "repoURL": "https://github.com/QZFfranky011223/G21-LocalCloud-Gaming",
                 "califURL": "#",
                 "projectURL": ""
             },
@@ -590,6 +551,55 @@
                 "projectURL": ""
             },
             {
+                "group": "G-04",
+                "members": "Almanza Castro Hamilton Randall<br>Flores Padilla David Eduardo<br>Mamani Morales Cristhian Daniel<br>Villegas Arancibia Mateo Gabriel",
+                "title": "Sistema distribuido de respaldos automáticos",
+                "repoURL": "https://github.com/HamiltonAlmanza/Proyecto-final-Infraestructura",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
+                "group": "G-12",
+                "members": "Durán Chambi Benjamín Ricardo<br>Escobar Moscoso Jorge Gabriel<br>Onofre Alanoca Roy",
+                "title": "Diseño e Implementación de un Sistema de Salas de Espera y Filas Virtuales (Virtual Queue)",
+                "repoURL": "https://github.com/ricmax945/proyecto-SIS313",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
+                "group": "G-03",
+                "members": "Flores Aquino Nayely<br>Herrera David Jesus<br>Ovando Calizaya Paola Daniela<br>Salgueiro Gardeazabal Josué David",
+                "title": "Simulación de Red Universitaria con Sakai",
+                "repoURL": "https://github.com/Davidh666/Proyecto-Sakai-23-SIS313",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
+                "group": "G-11",
+                "members": "Pomacahua Cardozo Benjamin<br>Quispe Gardeazabal Fernando Jose<br>Uzeda Rivera Alan Jesus<br>Villca Villca Jhoel Mauricio",
+                "title": "Diseño e Implementación de Plan de Backups Automatizado (Incremental y DRP)",
+                "repoURL": "https://github.com/JhoelVillca/sis313-documentacion-proyecto-final",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            
+            {
+                "group": "G-02",
+                "members": "Bayo Luizaga Freddy Ignacio<br>Ochoa Paz Erick Alexander<br>Vargas Paredes Jherson Efrain",
+                "title": "Photo Backup Seguro",
+                "repoURL": "https://github.com/JhendeFR/Infra_Proyect_Final",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
+                "group": "G-06",
+                "members": "Julian Joan Alexander<br>Pedraza Valverde Jose Maria<br>Sanchez Galarza Marco Antonio<br>Torres Balcera Rodrigo",
+                "title": "Portal Cautivo con Gestión de Consumo (GB/día) y Autenticación Universitaria",
+                "repoURL": "https://github.com/riguys123/SIS-313",
+                "califURL": "#",
+                "projectURL": ""
+            },
+            {
                 "group": "G-19",
                 "members": "Coraite Yanaje Luz Clara<br>Muraña Pizarro Nayda Thatiana<br>Rios Lizarazu Joaquin",
                 "title": "Implementación de Correo Corporativo de Alta Disponibilidad",
@@ -597,15 +607,7 @@
                 "califURL": "#",
                 "projectURL": ""
             },
-            {
-                "group": "G-21",
-                "members": "Huanca Coronado Oscar Santiago<br>Mollinedo Siles Renzo Sebastian<br>Quispe Zarate Franky<br>Vargas Alarcón Brayan Mario",
-                "title": "LocalCloud Gaming: Infraestructura Distribuida de Servidores de Juego",
-                "repoURL": "https://github.com/QZFfranky011223/G21-LocalCloud-Gaming",
-                "califURL": "#",
-                "projectURL": ""
-            }
-            ];
+        ];
 
         let sis313_defenses = [];
         let sis313_startTime = 9 * 60 + 30; // 09:30
@@ -705,7 +707,6 @@
                 // Se añadió 'align-middle' a todas las celdas para centrado vertical
                 row.innerHTML = `
                     <td class="py-3 px-3 whitespace-nowrap font-bold text-fct-pink align-middle" data-label="Orden:">${item.order}</td>
-                    <td class="py-3 px-3 whitespace-nowrap text-white font-medium align-middle" data-label="Hora:">${item.time}</td>
                     
                     <!-- Columna de Título: 'align-middle' para centrado vertical -->
                     <td class="py-3 px-3 max-w-xs xl:max-w-none break-words items-start align-middle" data-label="Proyecto:">
@@ -722,27 +723,6 @@
                     </td>
                 `;
 
-                // Se añadió 'align-middle' a todas las celdas para centrado vertical
-                if (item.califURL != '#') {
-                    row.innerHTML += `
-                        <!-- Botón Calificar (mantiene la lógica de click condicional) -->
-                        <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
-                            <a href="${item.califURL}" target="_blank" rel="noopener noreferrer" 
-                            onclick="handleCalificarClick(event, '${item.califURL}')"
-                            class="btn-calificacion inline-flex items-center justify-center p-2 rounded-lg text-white font-bold text-sm shadow-xl transition duration-300 ease-in-out w-full max-w-[150px] mx-auto">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.004 8.73c-.784-.57-.382-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                ¡Evaluar!
-                            </a>
-                        </td>
-                    `;
-                } else {
-                    row.innerHTML += `
-                        <!-- Botón Calificar (mantiene la lógica de click condicional) -->
-                        <td class="py-3 px-3 text-center align-middle" data-label="Calificar:">
-                            
-                        </td>
-                    `;
-                }
                 tableBody.appendChild(row);
             });
         }
